@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Render from './components/Render';
@@ -7,23 +7,20 @@ const initialState = {
   todos: [],
   newTodo: '',
   editIndex: -1,
-  completeTodos: [],
+  completebTobos: [],
 };
 
 const reducer = (state, NOpls) => {
   switch (NOpls.type) {
-    case 'TODOS':
-      return { ...state, todos: NOpls.LayOut };
-    case 'NEWTODO':
-      return { ...state, newTodo: NOpls.LayOut };
-    case 'EDITINDEX':
-      return { ...state, editIndex: NOpls.LayOut };
-    case 'COMPLETETODOS':
-      return { ...state, completeTodos: NOpls.LayOut };
-    case 'TOGGLETODO':
-      return { ...state, todos: state.todos.filter((_, index) => index !== NOpls.LayOut) };
-    case 'RESET':
-      return { ...initialState };
+    case 'SET_TODOS':
+      return { ...state, todos: NOpls.KickOut };
+    case 'SET_NEW_TODO':
+      return { ...state, newTodo: NOpls.KickOut };
+    case 'SET_EDIT_INDEX':
+      return { ...state, editIndex: NOpls.KickOut };
+    case 'SET_COMPLETE_TODOS':
+      return { ...state, completebTobos: NOpls.KickOut };
+    
     default:
       return state;
   }
@@ -32,27 +29,16 @@ const reducer = (state, NOpls) => {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      dispatch({ type: 'TODOS', LayOut: JSON.parse(storedTodos) });
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(state.todos));
-  }, [state.todos]);
-
   const handleCheckbox = (index) => {
-    if (state.completeTodos.includes(index)) {
-      dispatch({ type: 'COMPLETETODOS', LayOut: state.completeTodos.filter((i) => i !== index) });
+    if (state.completebTobos.includes(index)) {
+      dispatch({ type: 'SET_COMPLETE_TODOS', KickOut: state.completebTobos.filter((i) => i !== index) });
     } else {
-      dispatch({ type: 'COMPLETETODOS', LayOut: [...state.completeTodos, index] });
+      dispatch({ type: 'SET_COMPLETE_TODOS', KickOut: [...state.completebTobos, index] });
     }
   };
 
   const handleInputChange = (event) => {
-    dispatch({ type: 'NEWTODO', LayOut: event.target.value });
+    dispatch({ type: 'SET_NEW_TODO', KickOut: event.target.value });
   };
 
   const handleAddTodo = () => {
@@ -60,29 +46,29 @@ function App() {
       if (state.editIndex !== -1) {
         const updatedTodos = [...state.todos];
         updatedTodos[state.editIndex] = state.newTodo;
-        dispatch({ type: 'TODOS', LayOut: updatedTodos });
-        dispatch({ type: 'NEWTODO', LayOut: '' });
-        dispatch({ type: 'EDITINDEX', LayOut: -1 });
+        dispatch({ type: 'SET_TODOS', KickOut: updatedTodos });
+        dispatch({ type: 'SET_NEW_TODO', KickOut: '' });
+        dispatch({ type: 'SET_EDIT_INDEX', KickOut: -1 });
       } else {
         const updatedTodos = [...state.todos, state.newTodo];
-        dispatch({ type: 'TODOS', LayOut: updatedTodos });
-        dispatch({ type: 'NEWTODO', LayOut: '' });
+        dispatch({ type: 'SET_TODOS', KickOut: updatedTodos });
+        dispatch({ type: 'SET_NEW_TODO', KickOut: '' });
       }
     }
   };
 
   const handleEditTodo = (index) => {
-    dispatch({ type: 'EDITINDEX', LayOut: index });
-    dispatch({ type: 'NEWTODO', LayOut: state.todos[index] });
+    dispatch({ type: 'SET_EDIT_INDEX', KickOut: index });
+    dispatch({ type: 'SET_NEW_TODO', KickOut: state.todos[index] });
   };
 
   const handleDeleteTodo = (index) => {
     const updatedTodos = [...state.todos];
     updatedTodos.splice(index, 1);
-    dispatch({ type: 'TODOS', LayOut: updatedTodos });
+    dispatch({ type: 'SET_TODOS', KickOut: updatedTodos });
   };
-
   const todoCount = state.todos.length;
+
 
   return (
     <div className="App">
@@ -91,13 +77,14 @@ function App() {
         handleInputChange={handleInputChange}
         newTodo={state.newTodo}
         editIndex={state.editIndex}
+
       />
       <Render
         todos={state.todos}
         handleDeleteTodo={handleDeleteTodo}
         handleEditTodo={handleEditTodo}
         handleCheckbox={handleCheckbox}
-        completeTodos={state.completeTodos}
+        completebTobos={state.completebTobos}
         todoCount={todoCount}
       />
     </div>
