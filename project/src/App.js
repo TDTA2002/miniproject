@@ -10,18 +10,18 @@ const initialState = {
   completeTodos: [],
 };
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'SET_TODOS':
-      return { ...state, todos: action.payload };
-    case 'SET_NEW_TODO':
-      return { ...state, newTodo: action.payload };
-    case 'SET_EDIT_INDEX':
-      return { ...state, editIndex: action.payload };
-    case 'SET_COMPLETE_TODOS':
-      return { ...state, completeTodos: action.payload };
-    case 'TOGGLE_TODO':
-      return { ...state, todos: state.todos.filter((_, index) => index !== action.payload) };
+const reducer = (state, NOpls) => {
+  switch (NOpls.type) {
+    case 'TODOS':
+      return { ...state, todos: NOpls.LayOut };
+    case 'NEWTODO':
+      return { ...state, newTodo: NOpls.LayOut };
+    case 'EDITINDEX':
+      return { ...state, editIndex: NOpls.LayOut };
+    case 'COMPLETETODOS':
+      return { ...state, completeTodos: NOpls.LayOut };
+    case 'TOGGLETODO':
+      return { ...state, todos: state.todos.filter((_, index) => index !== NOpls.LayOut) };
     case 'RESET':
       return { ...initialState };
     default:
@@ -35,7 +35,7 @@ function App() {
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
     if (storedTodos) {
-      dispatch({ type: 'SET_TODOS', payload: JSON.parse(storedTodos) });
+      dispatch({ type: 'TODOS', LayOut: JSON.parse(storedTodos) });
     }
   }, []);
 
@@ -45,14 +45,14 @@ function App() {
 
   const handleCheckbox = (index) => {
     if (state.completeTodos.includes(index)) {
-      dispatch({ type: 'SET_COMPLETE_TODOS', payload: state.completeTodos.filter((i) => i !== index) });
+      dispatch({ type: 'COMPLETETODOS', LayOut: state.completeTodos.filter((i) => i !== index) });
     } else {
-      dispatch({ type: 'SET_COMPLETE_TODOS', payload: [...state.completeTodos, index] });
+      dispatch({ type: 'COMPLETETODOS', LayOut: [...state.completeTodos, index] });
     }
   };
 
   const handleInputChange = (event) => {
-    dispatch({ type: 'SET_NEW_TODO', payload: event.target.value });
+    dispatch({ type: 'NEWTODO', LayOut: event.target.value });
   };
 
   const handleAddTodo = () => {
@@ -60,26 +60,26 @@ function App() {
       if (state.editIndex !== -1) {
         const updatedTodos = [...state.todos];
         updatedTodos[state.editIndex] = state.newTodo;
-        dispatch({ type: 'SET_TODOS', payload: updatedTodos });
-        dispatch({ type: 'SET_NEW_TODO', payload: '' });
-        dispatch({ type: 'SET_EDIT_INDEX', payload: -1 });
+        dispatch({ type: 'TODOS', LayOut: updatedTodos });
+        dispatch({ type: 'NEWTODO', LayOut: '' });
+        dispatch({ type: 'EDITINDEX', LayOut: -1 });
       } else {
         const updatedTodos = [...state.todos, state.newTodo];
-        dispatch({ type: 'SET_TODOS', payload: updatedTodos });
-        dispatch({ type: 'SET_NEW_TODO', payload: '' });
+        dispatch({ type: 'TODOS', LayOut: updatedTodos });
+        dispatch({ type: 'NEWTODO', LayOut: '' });
       }
     }
   };
 
   const handleEditTodo = (index) => {
-    dispatch({ type: 'SET_EDIT_INDEX', payload: index });
-    dispatch({ type: 'SET_NEW_TODO', payload: state.todos[index] });
+    dispatch({ type: 'EDITINDEX', LayOut: index });
+    dispatch({ type: 'NEWTODO', LayOut: state.todos[index] });
   };
 
   const handleDeleteTodo = (index) => {
     const updatedTodos = [...state.todos];
     updatedTodos.splice(index, 1);
-    dispatch({ type: 'SET_TODOS', payload: updatedTodos });
+    dispatch({ type: 'TODOS', LayOut: updatedTodos });
   };
 
   const todoCount = state.todos.length;
