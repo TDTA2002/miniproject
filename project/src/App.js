@@ -12,13 +12,13 @@ const initialState = {
 
 const reducer = (state, NOpls) => {
   switch (NOpls.type) {
-    case 'SET_TODOS':
+    case 'TODOS':
       return { ...state, todos: NOpls.KickOut };
-    case 'SET_NEW_TODO':
+    case 'NEWTODO':
       return { ...state, newTodo: NOpls.KickOut };
-    case 'SET_EDIT_INDEX':
+    case 'EDITINDEX':
       return { ...state, editIndex: NOpls.KickOut };
-    case 'SET_COMPLETE_TODOS':
+    case 'COMPLETETODOS':
       return { ...state, completebTobos: NOpls.KickOut };
     
     default:
@@ -31,14 +31,14 @@ function App() {
 
   const handleCheckbox = (index) => {
     if (state.completebTobos.includes(index)) {
-      dispatch({ type: 'SET_COMPLETE_TODOS', KickOut: state.completebTobos.filter((i) => i !== index) });
+      dispatch({ type: 'COMPLETETODOS', KickOut: state.completebTobos.filter((i) => i !== index) });
     } else {
-      dispatch({ type: 'SET_COMPLETE_TODOS', KickOut: [...state.completebTobos, index] });
+      dispatch({ type: 'COMPLETETODOS', KickOut: [...state.completebTobos, index] });
     }
   };
 
   const handleInputChange = (event) => {
-    dispatch({ type: 'SET_NEW_TODO', KickOut: event.target.value });
+    dispatch({ type: 'NEWTODO', KickOut: event.target.value });
   };
 
   const handleAddTodo = () => {
@@ -46,26 +46,26 @@ function App() {
       if (state.editIndex !== -1) {
         const updatedTodos = [...state.todos];
         updatedTodos[state.editIndex] = state.newTodo;
-        dispatch({ type: 'SET_TODOS', KickOut: updatedTodos });
-        dispatch({ type: 'SET_NEW_TODO', KickOut: '' });
-        dispatch({ type: 'SET_EDIT_INDEX', KickOut: -1 });
+        dispatch({ type: 'TODOS', KickOut: updatedTodos });
+        dispatch({ type: 'NEWTODO', KickOut: '' });
+        dispatch({ type: 'EDITINDEX', KickOut: -1 });
       } else {
         const updatedTodos = [...state.todos, state.newTodo];
-        dispatch({ type: 'SET_TODOS', KickOut: updatedTodos });
-        dispatch({ type: 'SET_NEW_TODO', KickOut: '' });
+        dispatch({ type: 'TODOS', KickOut: updatedTodos });
+        dispatch({ type: 'NEWTODO', KickOut: '' });
       }
     }
   };
 
   const handleEditTodo = (index) => {
-    dispatch({ type: 'SET_EDIT_INDEX', KickOut: index });
-    dispatch({ type: 'SET_NEW_TODO', KickOut: state.todos[index] });
+    dispatch({ type: 'EDITINDEX', KickOut: index });
+    dispatch({ type: 'NEWTODO', KickOut: state.todos[index] });
   };
 
   const handleDeleteTodo = (index) => {
     const updatedTodos = [...state.todos];
     updatedTodos.splice(index, 1);
-    dispatch({ type: 'SET_TODOS', KickOut: updatedTodos });
+    dispatch({ type: 'TODOS', KickOut: updatedTodos });
   };
   const todoCount = state.todos.length;
 
